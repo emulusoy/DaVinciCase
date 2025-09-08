@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import avatarUrl from '../../assets/avatar.svg';
@@ -30,6 +30,8 @@ export default function PostList() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState('');
   const isEdit = useMemo(() => editingId !== null, [editingId]);
+  const composeRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     (async () => {
@@ -46,6 +48,14 @@ export default function PostList() {
     document.title = 'Posts | App';
   }, []);
 
+
+  useEffect(() => {
+    if (isEdit && composeRef.current) {
+      composeRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => titleRef.current?.focus(), 250);
+    }
+  }, [isEdit]);
+
   function resetForm() {
     setForm(empty);
     setEditingId(null);
@@ -61,14 +71,13 @@ export default function PostList() {
     try {
       if (isEdit && editingId !== null) {
         const updated = await updatePostRemote(editingId, form);
-        setPosts((prev) =>
-          prev.map((p) => (p.id === editingId ? updated : p))
-        );
+        setPosts(prev => prev.map(p => (p.id === editingId ? updated : p)));
       } else {
         const created = await createPostRemote(form);
-        setPosts((prev) => [created, ...prev]);
+        setPosts(prev => [created, ...prev]);
       }
       resetForm();
+      composeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (err) {
       setError((err as Error).message);
     }
@@ -78,13 +87,15 @@ export default function PostList() {
     setEditingId(p.id);
     setForm({ title: p.title, body: p.body ?? '', userId: p.userId });
     setError('');
+    composeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => titleRef.current?.focus(), 250);
   }
 
   async function onDelete(id: number) {
     if (!confirm('Silinsin mi?')) return;
     try {
       await deletePostRemote(id);
-      setPosts((prev) => prev.filter((p) => p.id !== id));
+      setPosts(prev => prev.filter(p => p.id !== id));
       if (editingId === id) resetForm();
     } catch (e) {
       alert((e as Error).message);
@@ -114,42 +125,68 @@ export default function PostList() {
       <section className="timeline">
         <div className="timeline-header">Postlar</div>
 
-        <div className="tweet" style={{ borderBottom: '1px solid var(--border)' }}>
-          <div />
-          <div style={{ display: 'grid', gap: 8 }}>
-            <div style={{ display: 'grid', gap: 8, gridTemplateColumns: '1fr auto auto' }}>
-              <Input placeholder="Ara: başlık, içerik, yazar..." value={query} onChange={e=>setQuery(e.target.value)} />
-              <Select
-                value={sortMode}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                  setSortMode(e.target.value as 'new' | 'old' | 'title')
-                }
-              >
-                <option value="new">Yeni → Eski</option>
-                <option value="old">Eski → Yeni</option>
-                <option value="title">Başlığa göre</option>
-              </Select>
-              <Select value={filterUserId === 'all' ? 'all' : String(filterUserId)} onChange={e=>setFilterUserId(e.target.value === 'all' ? 'all' : Number(e.target.value))}>
-                <option value="all">Tüm kullanıcılar</option>
-                {users.map(u=> <option key={u.id} value={u.id}>{u.username}</option>)}
-              </Select>
-            </div>
+        <div className="composer-card" ref={composeRef}>
+          <div className="composer-filters">
+            <Input
+              placeholder="Ara: başlık, içerik, yazar..."
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+            />
+            <Select
+              value={sortMode}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                setSortMode(e.target.value as 'new' | 'old' | 'title')
+              }
+            >
+              <option value="new">Yeni → Eski</option>
+              <option value="old">Eski → Yeni</option>
+              <option value="title">Başlığa göre</option>
+            </Select>
+            <Select
+              value={filterUserId === 'all' ? 'all' : String(filterUserId)}
+              onChange={e => setFilterUserId(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+            >
+              <option value="all">Tüm kullanıcılar</option>
+              {users.map(u => <option key={u.id} value={u.id}>{u.username}</option>)}
+            </Select>
+          </div>
 
-            <form onSubmit={onSubmit} style={{ display: 'grid', gap: 8 }}>
-              <Input placeholder="Başlık" value={form.title} onChange={e=>setForm({ ...form, title: e.target.value })} />
-              <Textarea rows={3} placeholder="Ne oluyor?" value={form.body ?? ''} onChange={e=>setForm({ ...form, body: e.target.value })}/>
-              <div style={{ display:'flex', gap:8, alignItems:'center' }}>
-                <Select value={String(form.userId)} onChange={e=>setForm({ ...form, userId:Number(e.target.value) })}>
-                  {users.map(u => <option key={u.id} value={u.id}>{u.username}</option>)}
-                </Select>
-                {error && <div className="tweet-username" role="alert">{error}</div>}
-                <Button type="submit" variant="primary" style={{ marginLeft:'auto' }}>{isEdit ? 'Güncelle' : 'Gönder'}</Button>
+          <form onSubmit={onSubmit} className="composer-form" aria-labelledby="composer-title">
+            <h3 id="composer-title" className="sr-only">Gönderi oluştur / düzenle</h3>
+            <Input
+              ref={titleRef}
+              placeholder={isEdit ? 'Başlığı güncelle…' : 'Başlık'}
+              value={form.title}
+              onChange={e => setForm({ ...form, title: e.target.value })}
+              aria-invalid={!!error}
+              aria-describedby={error ? 'composer-error' : undefined}
+            />
+            <Textarea
+              rows={3}
+              placeholder="Ne oluyor?"
+              value={form.body ?? ''}
+              onChange={e => setForm({ ...form, body: e.target.value })}
+            />
+            <div className="composer-actions">
+              <Select value={String(form.userId)} onChange={e => setForm({ ...form, userId: Number(e.target.value) })}>
+                {users.map(u => <option key={u.id} value={u.id}>{u.username}</option>)}
+              </Select>
+
+              {error && (
+                <div id="composer-error" className="form-error" role="alert" aria-live="polite">
+                  {error}
+                </div>
+              )}
+
+              <div className="composer-buttons">
+                <Button type="submit" variant="primary">{isEdit ? 'Güncelle' : 'Gönder'}</Button>
                 {isEdit && <Button type="button" onClick={resetForm}>İptal</Button>}
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
 
+        {/* Akış */}
         <section className="feed" aria-label="Post akışı">
           {loading && <div className="tweet">Yükleniyor…</div>}
           {err && <div className="tweet">Hata: {err}</div>}
@@ -160,7 +197,7 @@ export default function PostList() {
             const text = (p.body ?? '').trim() || '—';
             const time = `${(p.id % 12) + 1}sa`;
             const showMedia = p.id % 3 === 0;
-            const mediaUrl = `https://picsum.photos/seed/tweet-${p.id}/600/400`;//rastgelel foto eklemek için
+            const mediaUrl = `https://picsum.photos/seed/tweet-${p.id}/600/400`;
 
             return (
               <article key={p.id} className="tweet">
@@ -175,10 +212,10 @@ export default function PostList() {
                   <div className="tweet-text">{text}</div>
                   {showMedia && (
                     <div className="tweet-media">
-                      <img src={mediaUrl} alt="" style={{ display:'block', width:'100%', height:'auto' }} />
+                      <img src={mediaUrl} alt="" style={{ display: 'block', width: '100%', height: 'auto' }} />
                     </div>
                   )}
-                  <div style={{ display:'flex', gap:12, marginTop:8 }}>
+                  <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
                     <Button type="button" onClick={() => onEdit(p)}>Düzenle</Button>
                     <Button type="button" variant="danger" onClick={() => onDelete(p.id)}>Sil</Button>
                     <Link className="btn" to={`/posts/${p.id}`}>Detay</Link>
