@@ -6,6 +6,8 @@ export default function Home() {
       <h1>Merhaba</h1>
       <p>Case ile alakali bilgiler.</p>
 
+      <a className="btn" href="https://davincicase.onrender.com/docs">Swagger’ı Aç render service icin canlida backendi ayaga kaldirdim</a>
+        
       <header className="header">
         <h1 style={{ margin: 0 }}>🚀 Proje Kurulum Rehberi</h1>
         <nav className="nav" aria-label="Hızlı bağlantılar">
