@@ -1,4 +1,3 @@
-// frontend/src/components/users/NewUserForm.tsx
 import { useEffect, useState } from 'react';
 
 import { createUserRemote, updateUserRemote } from '../../services/remote';
@@ -44,14 +43,14 @@ export default function NewUserForm({ initial, onDone }: Props) {
     try {
       let saved: User;
       if (initial) {
-        // 🔧 UPDATE
+        //UPDATE
         saved = await updateUserRemote(initial.id, {
           name: form.name,
           username: form.username,
           email: form.email
         });
       } else {
-        // ➕ CREATE
+        // CREATE
         saved = await createUserRemote({
           name: form.name,
           username: form.username,
