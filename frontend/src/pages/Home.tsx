@@ -39,7 +39,12 @@ export default function Home() {
       <section className="panel hero">
         <div className="hero-left">
           <h1 className="hero-title">🚀 Proje Kurulum Rehberi</h1>
-          <p className="hero-sub">Frontend (Vite+React+TS) & Backend (NestJS) — tek repo, tek doküman.</p>
+          <p className="hero-sub">Merhaba Projede backend kismini aktif etmeniz gerekmektedir burada uyarida backend aktif olmadan diger sayfalar maalesef calimaz
+
+            Backend suesi bitebilir lutfen boyle hata irsaniz iletisime gecin
+
+            Swaggeri Ac butonuna tiklayrak backend sunucusunu ayaga kaldirabiliirsunuz
+          </p>
 
           <div className="badges">
             <span className="badge">Node 18+</span>
