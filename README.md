@@ -5,7 +5,7 @@ Linkler ;
 
 
 #Backend -> https://davincicase.onrender.com/docs
-Github Repo -> https://github.com/emulusoy
+
 
 
 Proje Kurulum Kılavuzu
