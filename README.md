@@ -1,3 +1,13 @@
+Linkler ;
+
+#UI -> https://amazing-syrniki-d0c166.netlify.app
+
+
+
+#Backend -> https://davincicase.onrender.com/docs
+
+
+
 Proje Kurulum Kılavuzu
 Bu rehber, projenin hem Backend hem de Frontend bileşenlerini yerel makinenizde nasıl kurup çalıştıracağınıza dair adım adım talimatlar içerir.
 
