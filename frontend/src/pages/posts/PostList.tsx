@@ -36,7 +36,7 @@ export default function PostList() {
   useEffect(() => {
     (async () => {
       try {
-        const [plist, ulist] = await Promise.all([fetchPosts(), fetchUsers()]);
+        const [plist, ulist] = await Promise.all([fetchPosts(), fetchUsers()]); //iki listelemeyi ayni yerde yapiyor hhiz icin
         setPosts(plist);
         setUsers(ulist);
       } catch (e) {
@@ -186,7 +186,7 @@ export default function PostList() {
           </form>
         </div>
 
-        {/* Akış */}
+
         <section className="feed" aria-label="Post akışı">
           {loading && <div className="tweet">Yükleniyor…</div>}
           {err && <div className="tweet">Hata: {err}</div>}

@@ -12,3 +12,6 @@ export default function SkeletonFeedItem() {
     </article>
   );
 }
+
+
+//veriler gelirken gösterilen iskelet yapılar

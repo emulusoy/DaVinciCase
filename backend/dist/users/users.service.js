@@ -16,7 +16,7 @@ let UsersService = class UsersService {
         { id: 4, name: 'Patricia Lebsack', username: 'Karianne', email: 'Julianne.OConner@kory.org' },
         { id: 5, name: 'Chelsey Dietrich', username: 'Kamren', email: 'Lucio_Hettinger@annie.ca' },
     ];
-    nextId = 1000;
+    nextId = this.users.length + 1;
     findAll() {
         return this.users;
     }

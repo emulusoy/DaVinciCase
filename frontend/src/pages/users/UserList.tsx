@@ -125,9 +125,10 @@ export default function UserList() {
     initial={editingUser}
     onDone={(saved) => {
       if (editingUser) {
-        setUsers(prev => prev.map(u => u.id === saved.id ? saved : u)); // UPDATE
-      } else {
-        setUsers(prev => [...prev, saved]); // CREATE
+        setUsers(prev => prev.map(u => u.id === saved.id ? saved : u)); // update
+      } 
+      else {
+        setUsers(prev => [...prev, saved]); // create
       }
       setEditingUser(null);
       setOpenModal(false);

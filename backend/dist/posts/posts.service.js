@@ -10,10 +10,10 @@ exports.PostsService = void 0;
 const common_1 = require("@nestjs/common");
 let PostsService = class PostsService {
     posts = [
-        { id: 1, userId: 1, title: 'qui est esse', body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500' },
-        { id: 2, userId: 1, title: 'eum et est occaecati', body: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour' },
-        { id: 3, userId: 2, title: 'nesciunt quas odio', body: 'handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.' },
-        { id: 4, userId: 3, title: 'dolorem eum magni eos body: Content here, content here, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident' },
+        { id: 1, userId: 1, title: 'Turkiye 0 Ispanya 6', body: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500' },
+        { id: 2, userId: 1, title: 'Futbol ', body: 'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour' },
+        { id: 3, userId: 2, title: 'Turkiyedeki haberler', body: 'handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.' },
+        { id: 4, userId: 3, title: 'test edilmis projeler ', body: 'Content here, content here, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident' },
     ];
     nextId = 1000;
     findAll() { return this.posts; }

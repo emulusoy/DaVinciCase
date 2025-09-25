@@ -14,7 +14,7 @@ export class UsersService {
     { id: 4, name: 'Patricia Lebsack', username: 'Karianne', email: 'Julianne.OConner@kory.org' },
     { id: 5, name: 'Chelsey Dietrich', username: 'Kamren', email: 'Lucio_Hettinger@annie.ca' },
   ];
-  private nextId = 1000;
+  private nextId = this.users.length + 1;
 
   findAll(): User[] {
     return this.users;
